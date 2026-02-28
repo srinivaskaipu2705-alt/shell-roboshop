@@ -11,36 +11,35 @@ do
 
 
 # get the private IP address of the launched instance
-if [ $instance != "frontend" ]; then
-    IP=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=$instance" --query 'Reservations[0].Instances[0].PrivateIpAddress' --output text) # Get the private IP address of the launched instance
-    echo "The private IP address of the $instance instance is: $IP" # Print the private IP address of the launched instance
-    RECORD_NAME="$instance.$DOMAIN_NAME" # Define the record name for Route 53
-else
-    IP=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=$instance" --query 'Reservations[0].Instances[0].PublicIpAddress' --output text) # Get the public IP address of the launched instance
-    echo "The public IP address of the $instance instance is: $IP" # Print the public IP address of the launched instance
-    RECORD_NAME="$DOMAIN_NAME" # Define the record name for Route 53
-fi
-echo "$instance : $IP" >> /tmp/instance-ips.txt # Append the instance name and IP address to a file
+    if [ $instance != "frontend" ]; then
+        IP=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=$instance" --query 'Reservations[0].Instances[0].PrivateIpAddress' --output text) # Get the private IP address of the launched instance
+        echo "The private IP address of the $instance instance is: $IP" # Print the private IP address of the launched instance
+        RECORD_NAME="$instance.$DOMAIN_NAME" # Define the record name for Route 53
+    else
+        IP=$(aws ec2 describe-instances --filters "Name=tag:Name,Values=$instance" --query 'Reservations[0].Instances[0].PublicIpAddress' --output text) # Get the public IP address of the launched instance
+        echo "The public IP address of the $instance instance is: $IP" # Print the public IP address of the launched instance
+        RECORD_NAME="$DOMAIN_NAME" # Define the record name for Route 53
+    fi
+    echo "$instance : $IP" >> /tmp/instance-ips.txt # Append the instance name and IP address to a file
 
 
 
-aws route53 change-resource-record-sets \
-  --hosted-zone-id $ZONE_ID \
- \
-  --change-batch '
-  {
-    "Comment": "Updating record set"
-    ,"Changes": [{
-      "Action"              : "UPSERT"
-      ,"ResourceRecordSet"  : {
-        "Name"              : "' $RECORD_NAME '"
-        ,"Type"             : "A"
-        ,"TTL"              : 1
-        ,"ResourceRecords"  : [{
-            "Value"         : "'" $IP "'"
+    aws route53 change-resource-record-sets \
+    --hosted-zone-id $ZONE_ID \
+    --change-batch '
+    {
+        "Comment": "Updating record set"
+        ,"Changes": [{
+        "Action"              : "UPSERT"
+        ,"ResourceRecordSet"  : {
+            "Name"              : "' $RECORD_NAME '"
+            ,"Type"             : "A"
+            ,"TTL"              : 1
+            ,"ResourceRecords"  : [{
+                "Value"         : "'" $IP "'"
+            }]
+        }
         }]
-      }
-    }]
-  }
-  '
+    }
+    '
 done
