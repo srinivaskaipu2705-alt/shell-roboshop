@@ -2,7 +2,7 @@
 
 AMI_ID="ami-0220d79f3f480ecf5" # Define the AMI ID for the EC2 instance
 SG_ID="sg-00c8683573ded1c4e" # Define the Security Group ID for the EC2 instance  
-ZONE-ID="Z1003128U2OCSI7JICC9" # Define the Hosted Zone ID for Route 53
+ZONE_ID="Z1003128U2OCSI7JICC9" # Define the Hosted Zone ID for Route 53
 DOMAIN_NAME="srini.store" # Define the domain name for Route 53
 
 for instance in $@
@@ -25,7 +25,7 @@ echo "$instance : $IP" >> /tmp/instance-ips.txt # Append the instance name and I
 
 
 aws route53 change-resource-record-sets \
-  --hosted-zone-id $ZONE-ID \
+  --hosted-zone-id $ZONE_ID \
  \
   --change-batch '
   {
