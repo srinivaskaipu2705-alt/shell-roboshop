@@ -87,11 +87,11 @@ cp $SCRIPTS_DIR/mongo.repo /etc/yum.repos.d/mongo.repo
 VALIDATE $? "Adding Mongo repo"
 
 dnf install mongodb-mongosh -y &>>$LOGS_FILE
-VALIDATE $? "Installing MongoDB Shell"
+VALIDATE $? "Installing MongoDB client"
 
-mongosh --host $MONGODB_HOST </app/db/master-data.js
+mongosh --host $MONGODB_HOST </app/db/master-data.js &>>$LOGS_FILE
 VALIDATE $? "Loading master data to MongoDB"
 
-systemctl restart mongod &>>$LOGS_FILE
-VALIDATE $? "Restarting MongoDB"
+systemctl restart catalogue &>>$LOGS_FILE
+VALIDATE $? "Restarting catalogue service"
 
