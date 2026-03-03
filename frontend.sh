@@ -62,7 +62,7 @@ VALIDATE $? "Extracting frontend application artifact"
 rm -rf /etc/nginx/nginx.conf &>>$LOGS_FILE
 VALIDATE $? "Removing default nginx configuration file"
 
-cp $SCRIPTS_DIR/config/nginx.conf /etc/nginx/nginx.conf &>>$LOGS_FILE
+cp $SCRIPTS_DIR/nginx.conf /etc/nginx/nginx.conf &>>$LOGS_FILE
 VALIDATE $? "Copying nginx configuration file"
 
 systemctl restart nginx &>>$LOGS_FILE
