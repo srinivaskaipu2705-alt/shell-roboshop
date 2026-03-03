@@ -47,6 +47,14 @@ VALIDATE $? "Adding roboshop user"
 
 mkdir /app 
 VALIDATE $? "Creating application directory"
+ 
+ id roboshop &>>$LOGS_FILE
+ if [ $? -ne 0 ]; then
+     echo -e "$R error:: roboshop user does not exist $N" | tee -a $LOGS_FILE
+     exit 1
+     else
+     echo -e "$G roboshop user exists $N" | tee -a $LOGS_FILE
+ fi
 
 curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip 
 VALIDATE $? "Downloading catalogue application artifact"
