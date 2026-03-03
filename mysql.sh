@@ -32,19 +32,14 @@ VALIDATE(){ # function to validate the exit status of the last command
     fi
 }
 
-dnf module disable redis -y &>>$LOGS_FILE
-VALIDATE $? "Disabling Redis module"
+dnf module install mysql -y &>>$LOGS_FILE
+VALIDATE $? "Installing MySQL module"
 
-dnf module enable redis:7 -y &>>$LOGS_FILE
-VALIDATE $? "Enabling Redis 7 module"
+systemctl enable mysqld &>>$LOGS_FILE
+VALIDATE $? "Enabling MySQL"
 
-dnf install redis -y &>>$LOGS_FILE
-VALIDATE $? "Installing Redis"
+systemctl start mysqld &>>$LOGS_FILE
+VALIDATE $? "Starting MySQL"
 
-sed -i 's/127.0.0.1/0.0.0.0/g' /protected-mode/ c protcted-mode no /etc/redis/redis.conf &>>$LOGS_FILE
-
-systemctl enable redis &>>$LOGS_FILE
-VALIDATE $? "Enabling Redis"
-
-systemctl start redis &>>$LOGS_FILE
-VALIDATE $? "Starting Redis"
+mysql_secure_installation --set-root-pass RoboShop@1 &>>$LOGS_FILE
+VALIDATE $? "Setting MySQL root password"
