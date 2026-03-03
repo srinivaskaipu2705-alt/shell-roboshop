@@ -30,9 +30,7 @@ fi
 
 #nodejs installation
 dnf module disable nodejs -y &>>$LOGS_FILE
-
 dnf module enable nodejs:20 -y &>>$LOGS_FILE
-
 dnf install nodejs -y &>>$LOGS_FILE
 
 id roboshop &>>$LOGS_FILE
@@ -44,11 +42,9 @@ else
 fi
 
 mkdir -p /app &>>$LOGS_FILE
-
 curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip 
 
 cd /app &>>$LOGS_FILE
-
 rm -rf * &>>$LOGS_FILE 
 
 unzip /tmp/catalogue.zip &>>$LOGS_FILE
@@ -56,16 +52,13 @@ dgdfjkhfheofhoi
 
 cd /app &>>$LOGS_FILE
 
-
 npm install    &>>$LOGS_FILE
 
 cp $SCRIPTS_DIR/catalogue.service /etc/systemd/system/catalogue.service
 
-systemctl daemon-reload 
-
-systemctl enable catalogue 
-
-systemctl start catalogue
+systemctl daemon-reload &>>$LOGS_FILE
+systemctl enable catalogue &>>$LOGS_FILE
+systemctl start catalogue &>>$LOGS_FILE
 
 cp $SCRIPTS_DIR/mongo.repo /etc/yum.repos.d/mongo.repo
 
@@ -74,7 +67,7 @@ dnf install mongodb-mongosh -y &>>$LOGS_FILE
 INDEX=$(mongosh mongodb.srini.store --quiet --eval    "db.getMongo().getDBNames().indexOf('catalogue')")
 if [ $INDEX -le 0 ]; then
     mongosh --host $MONGODB_HOST </app/db/master-data.js &>>$LOGS_FILE
-    
+
 else
     echo -e "$Y catalogue database already exists,SKIPPING... $N"
 fi
