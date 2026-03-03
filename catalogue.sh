@@ -71,7 +71,8 @@ VALIDATE $? "Changing to application directory"
 npm install    &>>$LOGS_FILE
 VALIDATE $? "Installing catalogue application dependencies"
 
-vim $SCRIPTS_DIR/catalogue.service /etc/systemd/system/catalogue.service
+cp $SCRIPTS_DIR/catalogue.service /etc/systemd/system/catalogue.service
+VALIDATE $? "Copying catalogue service file"
 
 systemctl daemon-reload 
 VALIDATE $? "Reloading systemd daemon"
