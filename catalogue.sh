@@ -60,12 +60,10 @@ VALIDATE $? "Downloading catalogue application artifact"
 cd /app &>>$LOGS_FILE
 VALIDATE $? "Changing to application directory"
 
-unzip /tmp/catalogue.zip &>>$LOGS_FILE
-VALIDATE $? "Extracting catalogue application artifact"
-
-
 rm -rf * &>>$LOGS_FILE 
 VALIDATE $? "Cleaning application directory"
+unzip /tmp/catalogue.zip &>>$LOGS_FILE
+VALIDATE $? "Extracting catalogue application artifact"
 
 cd /app &>>$LOGS_FILE
 VALIDATE $? "Changing to application directory"
