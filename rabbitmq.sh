@@ -11,9 +11,8 @@ LOGS_FOLDER="/var/log/shell-roboshop" # Define the logs folder path
 SCRIPT_NAME=$(echo $0 | cut -d "." -f1) # Define the logs file name based on the script name
 LOGS_FILE="$LOGS_FOLDER/$SCRIPT_NAME.log" # Define the full path to the logs file
 START_TIME=$(date +%s) # Record the start time of the script execution
-
+SCRIPT_DIR=$PWD
 mkdir -p $LOGS_FOLDER # Create the logs folder if it doesn't exist
-SCRIPT_NAME=$PWD
 
 echo "$(date): Starting the script execution..." | tee -a $LOGS_FILE # Log the start of the script execution
 
@@ -33,7 +32,8 @@ VALIDATE(){ # function to validate the exit status of the last command
     fi
 }
 
-cp $SCRIPT_NAME/rabbitmq.repo /etc/yum.repos.d/rabbitmq.repo &>>$LOGS_FILE
+
+cp $SCRIPT_DIR/rabbitmq.repo /etc/yum.repos.d/rabbitmq.repo &>>$LOGS_FILE
 VALIDATE $? "Copying RabbitMQ repository file"
 
 dnf install rabbitmq-server -y &>>$LOGS_FILE
@@ -50,3 +50,7 @@ VALIDATE $? "Adding RabbitMQ user"
 
 rabbitmqctl set_permissions -p / roboshop ".*" ".*" ".*" &>>$LOGS_FILE
 VALIDATE $? "Setting RabbitMQ permissions"
+
+END_TIME=$(date +%s) # Record the end time of the script execution
+EXECUTION_TIME=$((END_TIME - START_TIME)) # Calculate the execution time
+echo "$(date): Script execution completed in $EXECUTION_TIME seconds." | tee -a $
