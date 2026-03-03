@@ -60,10 +60,12 @@ VALIDATE $? "Downloading catalogue application artifact"
 cd /app &>>$LOGS_FILE
 VALIDATE $? "Changing to application directory"
 
-rm -rf * &>>$LOGS_FILE 
-VALIDATE $? "Cleaning application directory"
 unzip /tmp/catalogue.zip &>>$LOGS_FILE
 VALIDATE $? "Extracting catalogue application artifact"
+
+
+rm -rf * &>>$LOGS_FILE 
+VALIDATE $? "Cleaning application directory"
 
 cd /app &>>$LOGS_FILE
 VALIDATE $? "Changing to application directory"
@@ -89,7 +91,7 @@ VALIDATE $? "Adding Mongo repo"
 dnf install mongodb-mongosh -y &>>$LOGS_FILE
 VALIDATE $? "Installing MongoDB client"
 
-INDEX=$(mongosh mongodb.srini.store --quiet --eval    "db.getMongo().getDBNames().indexOf('catalogue')")
+INDEX=$(mongosh mongodb.srini.store --quiet --eval "db.getMongo().getDBNames().indexOf('catalogue')")
 if [ $INDEX -le 0 ]; then
     mongosh --host $MONGODB_HOST </app/db/master-data.js &>>$LOGS_FILE
     VALIDATE $? "Loading master data to MongoDB"
