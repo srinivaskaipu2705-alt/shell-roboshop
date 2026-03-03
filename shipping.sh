@@ -97,5 +97,5 @@ systemctl restart shipping &>>$LOGS_FILE
 VALIDATE $? "Restarting shipping service"
 
 END_TIME=$(date +%s) # Record the end time of the script execution
-EXECUTION_TIME=$((END_TIME - START_TIME)) # Calculate the execution time
+EXECUTION_TIME=$(($END_TIME - $START_TIME)) # Calculate the execution time
 echo "$(date): Script execution completed in $EXECUTION_TIME seconds." | tee -a $LOGS_FILE
