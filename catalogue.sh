@@ -90,14 +90,3 @@ VALIDATE $? "Loading master data to MongoDB"
 systemctl restart mongod &>>$LOGS_FILE
 VALIDATE $? "Restarting MongoDB"
 
-show dbs
-VALIDATE $? "Showing databases in MongoDB"
-
-use catalogue
-VALIDATE $? "Switching to catalogue database in MongoDB"
-
-show collections
-VALIDATE $? "Showing collections in MongoDB"
-
-db.products.find()
-VALIDATE $? "Showing documents in products collection in MongoDB"
