@@ -31,3 +31,18 @@ VALIDATE(){ # function to validate the exit status of the last command
         exit 1
     fi
 }
+
+dnf install rabbitmq-server -y &>>$LOGS_FILE
+VALIDATE $? "Installing RabbitMQ" 
+
+systemctl enable rabbitmq-server &>>$LOGS_FILE
+VALIDATE $? "Enabling RabbitMQ" 
+
+systemctl start rabbitmq-server &>>$LOGS_FILE
+VALIDATE $? "Starting RabbitMQ"
+
+rabbitmqctl add_user roboshop roboshop123 &>>$LOGS_FILE
+VALIDATE $? "Adding RabbitMQ user"
+
+rabbitmqctl set_permissions -p / roboshop ".*" ".*" ".*" &>>$LOGS_FILE
+VALIDATE $? "Setting RabbitMQ permissions"
