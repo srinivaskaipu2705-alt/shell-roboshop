@@ -12,8 +12,9 @@ SCRIPT_NAME=$(echo $0 | cut -d "." -f1) # Define the logs file name based on the
 LOGS_FILE="$LOGS_FOLDER/$SCRIPT_NAME.log" # Define the full path to the logs file
 MONGODB_HOST="mongodb.srini.store" # Define the MongoDB host address
 SCRIPTS_DIR=$PWD # Define the directory where the scripts are located
-mkdir -p $LOGS_FOLDER # Create the logs folder if it doesn't exist
+MYSQL_HOST="mysql.srini.store" # Define the MySQL host address
 
+mkdir -p $LOGS_FOLDER # Create the logs folder if it doesn't exist
 echo "$(date): Starting the script execution..." | tee -a $LOGS_FILE # Log the start of the script execution
 
 if [ $USERID -eq 0 ]; then
@@ -80,6 +81,21 @@ VALIDATE $? "Enabling shipping service"
 systemctl start shipping &>>$LOGS_FILE
 VALIDATE $? "Starting shipping service"
 
+dnf install mysql -y &>>$LOGS_FILE
+VALIDATE $? "Installing MySQL client"
+
+mysql -h $MYSQL_HOST -uroot -pRoboShop@1 -e "use cities" &>>$LOGS_FILE
+if [ $? -ne 0 ]; then
+    mysql -h $MYSQL_HOST -uroot -pRoboShop@1 < /app/db/schema.sql &>>$LOGS_FILE
+    mysql -h $MYSQL_HOST -uroot -pRoboShop@1 < /app/db/app-user.sql &>>$LOGS_FILE
+    mysql -h $MYSQL_HOST -uroot -pRoboShop@1 < /app/db/master-data.sql &>>$LOGS_FILE
+else
+    echo -e "$Y shipping data is already loaded SKIPPING... $N" | tee -a $LOGS_FILE
+fi
+
+systemctl restart shipping &>>$LOGS_FILE
+VALIDATE $? "Restarting shipping service"
+
 END_TIME=$(date +%s) # Record the end time of the script execution
 EXECUTION_TIME=$((END_TIME - START_TIME)) # Calculate the execution time
-echo "$(date): Script execution completed in $EXECUTION_TIME seconds." | tee -a $
+echo "$(date): Script execution completed in $EXECUTION_TIME seconds." | tee -a $LOGS_FILE
