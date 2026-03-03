@@ -7,6 +7,7 @@ Y='\033[0;33m'
 B='\033[0;34m'
 N='\033[0m' # No Color
 
+START_TIME=$(date +%s) # Record the start time of the script execution
 LOGS_FOLDER="/var/log/shell-roboshop" # Define the logs folder path
 SCRIPT_NAME=$(echo $0 | cut -d "." -f1) # Define the logs file name based on the script name
 LOGS_FILE="$LOGS_FOLDER/$SCRIPT_NAME.log" # Define the full path to the logs file
@@ -77,5 +78,5 @@ systemctl start payment &>>$LOGS_FILE
 VALIDATE $? "Starting payment service" 
 
 END_TIME=$(date +%s) # Record the end time of the script execution
-EXECUTION_TIME=$((END_TIME - START_TIME)) # Calculate the execution time
-echo "$(date): Script execution completed in $EXECUTION_TIME seconds." | tee -a $
+EXECUTION_TIME=$(($END_TIME - $START_TIME)) # Calculate the execution time
+echo "$(date): Script execution completed in $EXECUTION_TIME seconds." | tee -a $LOGS_FILE
