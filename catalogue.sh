@@ -62,12 +62,11 @@ VALIDATE $? "Changing to application directory"
 
 rm -rf * &>>$LOGS_FILE 
 VALIDATE $? "Cleaning application directory"
-
 unzip /tmp/catalogue.zip &>>$LOGS_FILE
 VALIDATE $? "Extracting catalogue application artifact"
 
 cd /app 
-validate $? "Changing to application directory"
+VALIDATE $? "Changing to application directory"
 
 npm install    &>>$LOGS_FILE
 VALIDATE $? "Installing catalogue application dependencies"
