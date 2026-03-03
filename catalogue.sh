@@ -51,7 +51,7 @@ else
     echo -e "$Y roboshop user already exists,SKIPPING... $N"
 fi
 
-mkdir -p /app 
+mkdir -p /app &>>$LOGS_FILE
 VALIDATE $? "Creating application directory"
 
 curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip 
@@ -65,7 +65,7 @@ VALIDATE $? "Cleaning application directory"
 unzip /tmp/catalogue.zip &>>$LOGS_FILE
 VALIDATE $? "Extracting catalogue application artifact"
 
-cd /app 
+cd /app &>>$LOGS_FILE
 VALIDATE $? "Changing to application directory"
 
 npm install    &>>$LOGS_FILE
