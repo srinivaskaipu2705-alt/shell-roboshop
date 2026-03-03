@@ -13,7 +13,7 @@ LOGS_FILE="$LOGS_FOLDER/$SCRIPT_NAME.log" # Define the full path to the logs fil
 START_TIME=$(date +%s) # Record the start time of the script execution
 
 mkdir -p $LOGS_FOLDER # Create the logs folder if it doesn't exist
-SCRIPT_NAME=$($PWD)
+SCRIPT_NAME=$PWD
 
 echo "$(date): Starting the script execution..." | tee -a $LOGS_FILE # Log the start of the script execution
 
