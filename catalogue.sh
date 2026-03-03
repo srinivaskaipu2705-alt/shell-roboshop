@@ -11,7 +11,7 @@ LOGS_FOLDER="/var/log/shell-roboshop" # Define the logs folder path
 SCRIPT_NAME=$(echo $0 | cut -d "." -f1) # Define the logs file name based on the script name
 LOGS_FILE="$LOGS_FOLDER/$SCRIPT_NAME.log" # Define the full path to the logs file
 MONGODB_HOST="mongodb.srini.store" # Define the MongoDB host address
-
+SCRIPTS_DIR=$pwd # Define the directory where the scripts are located
 mkdir -p $LOGS_FOLDER # Create the logs folder if it doesn't exist
 
 echo "$(date): Starting the script execution..." | tee -a $LOGS_FILE # Log the start of the script execution
@@ -62,10 +62,12 @@ unzip /tmp/catalogue.zip &>>$LOGS_FILE
 VALIDATE $? "Extracting catalogue application artifact"
 
 cd /app 
+validate $? "Changing to application directory"
+
 npm install    &>>$LOGS_FILE
 VALIDATE $? "Installing catalogue application dependencies"
 
-vim catalogue.service /etc/systemd/system/catalogue.service
+vim $SCRIPTS_DIR/catalogue.service /etc/systemd/system/catalogue.service
 
 systemctl daemon-reload 
 VALIDATE $? "Reloading systemd daemon"
@@ -76,7 +78,7 @@ VALIDATE $? "Enabling catalogue service"
 systemctl start catalogue
 VALIDATE $? "Starting catalogue service"
 
-cp mongo.repo /etc/yum.repos.d/mongo.repo
+cp $SCRIPTS_DIR/mongo.repo /etc/yum.repos.d/mongo.repo
 VALIDATE $? "Adding Mongo repo"
 
 dnf install mongodb-mongosh -y &>>$LOGS_FILE
