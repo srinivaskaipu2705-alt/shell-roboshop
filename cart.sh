@@ -17,9 +17,9 @@ mkdir -p $LOGS_FOLDER # Create the logs folder if it doesn't exist
 echo "$(date): Starting the script execution..." | tee -a $LOGS_FILE # Log the start of the script execution
 
 if [ $USERID -eq 0 ]; then
-    echo -e "$B I am root cart $N"
+    echo -e "$B I am root user $N"
     else 
-    echo -e "$R error:: you are not root cart, please run this script as root cart $N"
+    echo -e "$R error:: you are not root user, please run this script as root user $N"
     exit 1
 fi
 
