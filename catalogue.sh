@@ -11,7 +11,7 @@ LOGS_FOLDER="/var/log/shell-roboshop" # Define the logs folder path
 SCRIPT_NAME=$(echo $0 | cut -d "." -f1) # Define the logs file name based on the script name
 LOGS_FILE="$LOGS_FOLDER/$SCRIPT_NAME.log" # Define the full path to the logs file
 MONGODB_HOST="mongodb.srini.store" # Define the MongoDB host address
-SCRIPTS_DIR=$pwd # Define the directory where the scripts are located
+SCRIPTS_DIR=$PWD # Define the directory where the scripts are located
 mkdir -p $LOGS_FOLDER # Create the logs folder if it doesn't exist
 
 echo "$(date): Starting the script execution..." | tee -a $LOGS_FILE # Log the start of the script execution
@@ -57,7 +57,7 @@ VALIDATE $? "Creating application directory"
 curl -o /tmp/catalogue.zip https://roboshop-artifacts.s3.amazonaws.com/catalogue-v3.zip 
 VALIDATE $? "Downloading catalogue application artifact"
 
-cd /app 
+cd /app &>>$LOGS_FILE
 VALIDATE $? "Changing to application directory"
 
 rm -rf * &>>$LOGS_FILE 
