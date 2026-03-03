@@ -89,8 +89,13 @@ VALIDATE $? "Adding Mongo repo"
 dnf install mongodb-mongosh -y &>>$LOGS_FILE
 VALIDATE $? "Installing MongoDB client"
 
-mongosh --host $MONGODB_HOST </app/db/master-data.js &>>$LOGS_FILE
-VALIDATE $? "Loading master data to MongoDB"
+INDEX=$(mongosh mongodb.srini.store --quiet --eval    "db.getMongo().getDBNames().indexOf('catalogue')")
+if [ $INDEX -le 0 ]; then
+    mongosh --host $MONGODB_HOST </app/db/master-data.js &>>$LOGS_FILE
+    VALIDATE $? "Loading master data to MongoDB"
+else
+    echo -e "$Y catalogue database already exists,SKIPPING... $N"
+fi
 
 systemctl restart catalogue &>>$LOGS_FILE
 VALIDATE $? "Restarting catalogue service"
